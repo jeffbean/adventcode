@@ -44,16 +44,8 @@ func validateAnagram(phrase string) bool {
 	origWords := strings.Split(phrase, _part1Sep)
 	sort.Strings(origWords)
 	// fmt.Printf("origwords: %v\n", origWords)
-	for i := 0; i < len(origWords); i++ {
-		others := make([]string, len(origWords))
-		copy(others, origWords)
-		copy(others[i:], others[i+1:])
-		others[len(others)-1] = ""
-		others = others[:len(others)-1]
-		if common.DetectAnagram(origWords[i], others) {
-			log.Printf("anagram: %q -> %v", origWords[i], others)
-			return false
-		}
+	if common.DetectAnagram(origWords) {
+		return false
 	}
 	return true
 }
