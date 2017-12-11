@@ -12,8 +12,7 @@ const _spreadSheetSep = "\t"
 
 var dataFile = "day02/input.txt"
 
-func readInSpreadsheet(path string) (ss [][]int) {
-	data := common.ReadFile(path)
+func readInSpreadsheet(data []byte) (ss [][]int) {
 	for _, line := range strings.Split(string(data), "\n") {
 		nums, err := common.StringToInts(line, _spreadSheetSep)
 		if err != nil {
@@ -44,10 +43,41 @@ func checkSumMatrix(ss [][]int) int {
 	return checkSum
 }
 
+func checksumDivides(ss [][]int) int {
+	var checkSum int
+	for row, b := range ss {
+		var divisor int
+		for i, c := range b {
+			for j := 0; j < len(b); j++ {
+				if i == j {
+					continue
+				}
+				r := c % b[j]
+				if r == 0 {
+					divisor = c / b[j]
+					break
+				}
+			}
+		}
+
+		checkSum += divisor
+		log.Printf("row %v, divisor: %v", row, divisor)
+	}
+	return checkSum
+}
+
 func part1(ss [][]int) int {
 	return checkSumMatrix(ss)
 }
 
+func part2(ss [][]int) int {
+	return checksumDivides(ss)
+}
+
 func main() {
-	fmt.Printf("answer: %v\n", part1(readInSpreadsheet(dataFile)))
+	data := common.ReadFile(dataFile)
+
+	fmt.Printf("part1 answer: %v\n", part1(readInSpreadsheet(data)))
+	fmt.Printf("part2 answer: %v\n", part2(readInSpreadsheet(data)))
+
 }
