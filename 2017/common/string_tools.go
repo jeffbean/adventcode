@@ -9,7 +9,7 @@ import (
 // StringToInts takes in a string and seporator and returns a slce of ints
 func StringToInts(in string, sep string) (out []int, err error) {
 	for _, i := range strings.Split(in, sep) {
-		num, err := strconv.Atoi(i)
+		num, err := strconv.Atoi(strings.TrimSpace(i))
 		if err != nil {
 			return nil, err
 		}
