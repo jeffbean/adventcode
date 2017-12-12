@@ -61,11 +61,9 @@ func part1() int {
 func part2() int {
 	_, n := walkTheJumps2(readInJumps(common.ReadFile(_dataFile)))
 	return n
-
 }
 
 func main() {
 	fmt.Printf("%v\n", part1())
 	fmt.Printf("%v\n", part2())
-
 }
