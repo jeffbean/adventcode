@@ -41,9 +41,9 @@ func findLargest(a blocks) int {
 	return maxI
 }
 
-func redistibuteBlocks(b blocks) int {
+func redistibuteBlocks(b blocks) (int, int) {
 	loopCount := 1
-	foundBlocks := make(map[string]struct{})
+	foundBlocks := make(map[string]int)
 	for i := 2; i < _maxLoopCount; i++ {
 		if i >= len(b.banks) {
 			i = 0
@@ -64,26 +64,32 @@ func redistibuteBlocks(b blocks) int {
 		}
 		log.Printf("loop [%v] : %v ", loopCount, b.String())
 
-		if _, ok := foundBlocks[b.String()]; ok {
-			return loopCount
+		if previousLoop, ok := foundBlocks[b.String()]; ok {
+			return loopCount - previousLoop, loopCount
 		}
-		foundBlocks[b.String()] = struct{}{}
+		foundBlocks[b.String()] = loopCount
 		loopCount++
 	}
 
-	return loopCount
+	return 0, loopCount
 }
 
 func part1() int {
 	part1Blocks := blocks{
 		banks: readInBlocks(common.GetInputFile()),
 	}
-	return redistibuteBlocks(part1Blocks)
+	_, i := redistibuteBlocks(part1Blocks)
+	return i
 }
 
-func part2() {
+func part2() int {
+	part1Blocks := blocks{
+		banks: readInBlocks(common.GetInputFile()),
+	}
+	i, _ := redistibuteBlocks(part1Blocks)
+	return i
 }
 
 func main() {
-	fmt.Printf("%v\n", part1())
+	fmt.Printf("%v\n", part2())
 }
