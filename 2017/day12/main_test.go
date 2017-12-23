@@ -38,8 +38,8 @@ func TestPart1(t *testing.T) {
 	for _, n := range g.nodes {
 		t.Logf("%#v", n)
 	}
-	nodes := make(map[int]struct{})
-	n := g.findInGroup(0, nodes)
+	nodes := make(map[int]int)
+	n := g.findInGroup(0, 0, nodes)
 	t.Log(n)
 	assert.Equal(t, 6, len(n))
 
