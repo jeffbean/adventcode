@@ -1,12 +1,8 @@
 package main
 
-import (
-	"fmt"
-	"testing"
-)
+import "testing"
 
-func TestPart1(t *testing.T) {
-	testString := `pbga (66)
+var testString = `pbga (66)
 xhth (57)
 ebii (61)
 havc (66)
@@ -19,13 +15,16 @@ jptl (61)
 ugml (68) -> gyxo, ebii, jptl
 gyxo (61)
 cntj (57)`
-	f := readInGraph([]byte(testString))
+
+func TestPart1(t *testing.T) {
+	// f := readInGraph([]byte(testString))
 	// t.Log(f)
-	for _, node := range f {
-		fmt.Println(node)
-	}
+	// for _, node := range f {
+	// 	fmt.Println(node)
+	// }
 }
 
 func TestPart2(t *testing.T) {
-
+	f := readInGraph([]byte(testString))
+	findWeights(f)
 }

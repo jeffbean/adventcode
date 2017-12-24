@@ -32,7 +32,7 @@ func (n node) String() string {
 	var r string
 	r += fmt.Sprintf("%v(%v)", n.name, n.weight)
 	for _, child := range n.children {
-		r += fmt.Sprintf("\t->%v", child.String())
+		r += fmt.Sprintf("->%v", child.String())
 
 	}
 	return r
@@ -96,17 +96,43 @@ func findRoot(t Tree) string {
 	return ""
 }
 
+func findWeights(t Tree) {
+	// thing := make(map[int]*node)
+	for _, node := range t {
+		w := findWeightsNode(node)
+		if w > 0 {
+			fmt.Printf("found %v weight: %v\n", node, w)
+		}
+	}
+
+}
+func findWeightsNode(node *node) int {
+	towerW := 0
+	if node.children == nil || node.parent == nil {
+		return towerW
+	}
+
+	for _, child := range node.children {
+		// fmt.Printf("looking at node: %s\n", node.name)
+		towerW += child.weight
+		towerW += findWeightsNode(child)
+	}
+	towerW += node.weight
+	return towerW
+}
+
 func part1(data []byte) string {
 	tree := readInGraph(data)
 	return findRoot(tree)
 }
 
-func part2() int {
-	return 0
+func part2(data []byte) {
+	tree := readInGraph(data)
+	findWeights(tree)
 }
 
 func main() {
 	data := common.GetInputFile()
-	fmt.Printf("%v\n", part1(data))
-	fmt.Printf("%v\n", part2())
+	// fmt.Printf("%v\n", part1(data))
+	part2(data)
 }
