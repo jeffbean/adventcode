@@ -31,10 +31,6 @@ type node struct {
 func (n node) String() string {
 	var r string
 	r += fmt.Sprintf("%v(%v)", n.name, n.weight)
-	for _, child := range n.children {
-		r += fmt.Sprintf("->%v", child.String())
-
-	}
 	return r
 }
 
@@ -97,27 +93,53 @@ func findRoot(t Tree) string {
 }
 
 func findWeights(t Tree) {
-	// thing := make(map[int]*node)
-	for _, node := range t {
-		w := findWeightsNode(node)
-		if w > 0 {
-			fmt.Printf("found %v weight: %v\n", node, w)
-		}
-	}
+	rootNode := findRoot(t)
+	// found := false
+	theNode, _ := t[rootNode]
+	// ws := make(map[string]int, len(theNode.children))
+
+	fmt.Printf("found rootnode children weights: %v\n", rootNode)
+	g := findUnbalancedTower(t, theNode)
+	fmt.Printf("\n\tnode: %v, (%v)\n\n", g.name, g.weight)
+	// for n, w := range ws {
+	// 	fmt.Printf("\tnode %-10v: %-10v\n", n, w)
+	// }
 
 }
-func findWeightsNode(node *node) int {
-	towerW := 0
-	if node.children == nil || node.parent == nil {
-		return towerW
-	}
 
-	for _, child := range node.children {
-		// fmt.Printf("looking at node: %s\n", node.name)
-		towerW += child.weight
-		towerW += findWeightsNode(child)
+func findUnbalancedTower(t Tree, nod *node) *node {
+	ws := make(map[string]int, len(nod.children))
+	wsCount := make(map[int]int, len(nod.children))
+	for _, child := range nod.children {
+		ws[child.name] = findTowerWeight(child)
+		wsCount[ws[child.name]]++
 	}
+	fmt.Printf("found child tower weights %v: %v\n", nod.name, wsCount)
+	for n, w := range wsCount {
+		if w != 1 {
+			continue
+		}
+		fmt.Printf("Found the odd one: %v\n", n)
+		for nname, val := range ws {
+			// fmt.Printf("here we compare %v==%v\n", val, n)
+			if val == n {
+				fmt.Printf("calling recurse function on unbalenced %q\n", t[nname].name)
+				return findUnbalancedTower(t, t[nname])
+			}
+		}
+	}
+	return nod
+}
+
+func findTowerWeight(node *node) int {
+	towerW := 0
 	towerW += node.weight
+	// fmt.Printf("node: %10s     (%8v)\n", node.name, node.weight)
+	for _, child := range node.children {
+		// fmt.Printf("%20s (%8v)\n", child.name, child.weight)
+		towerW += findTowerWeight(child)
+	}
+	// fmt.Printf("--------------------%10v\n", towerW)
 	return towerW
 }
 
