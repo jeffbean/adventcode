@@ -42,6 +42,7 @@ func FileToLines(filePath string) (lines []string, err error) {
 	err = scanner.Err()
 	return
 }
+
 func parseInput(b []string) ([]int, error) {
 	inInts := []int{}
 	for _, s := range b {
